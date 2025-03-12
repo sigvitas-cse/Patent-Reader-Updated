@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import "./Analysis.css";
 import mammoth from "mammoth";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Routes,
-} from "react-router-dom";
-import QrCodeComponent from "./QrCodeComponent";
-import Mannual from "./Mannual";
+// import {
+//   BrowserRouter as Router,
+//   Switch,
+//   Route,
+//   Link,
+//   Routes,
+// } from "react-router-dom";
+// import QrCodeComponent from "./QrCodeComponent";
+// import Mannual from "./Mannual";
 import { useNavigate } from "react-router-dom";
-import Select from "react-select";
+// import Select from "react-select";
 
 function Analysis() {
   const [fileName, setFileName] = useState("Not Selected");
@@ -24,19 +24,19 @@ function Analysis() {
   const [claimedWord, setClaimedWord] = useState("Section Not found");
   const [abstractWord, setAbstractWord] = useState("Section Not found");
   const [fileContent, setFileContent] = useState("");
-  const [sections, setSections] = useState([]);
+  // const [sections, setSections] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [showFileContent, setShowFileContent] = useState(false);
   const [modifiedTitle, setModifiedTitle] = useState("Title Not found");
-  const [originalTitle, setOriginalTitle] = useState("");
+  // const [originalTitle, setOriginalTitle] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [imgCount, setImgCount] = useState(0);
-  const [totalclaims, setTotalClaims] = useState(0);
-  const [independentClaims, setIndependentClaims] = useState(0);
-  const [dependentClaims, setDependentClaims] = useState(0);
-  const [dependentClaimNumbers, setDependentClaimNumbers] = useState(0);
-  const [paragraphsInClaims, setParagraphsInClaims] = useState(0);
-  const [paragraphCount, setParagraphCount] = useState(0);
+  // const [totalclaims, setTotalClaims] = useState(0);
+  // const [independentClaims, setIndependentClaims] = useState(0);
+  // const [dependentClaims, setDependentClaims] = useState(0);
+  // const [dependentClaimNumbers, setDependentClaimNumbers] = useState(0);
+  // const [paragraphsInClaims, setParagraphsInClaims] = useState(0);
+  // const [paragraphCount, setParagraphCount] = useState(0);
   const [dependent, setdependent] = useState(0);
   const [independent, setIndependent] = useState(0);
   const [total, setTotal] = useState(0);
@@ -45,15 +45,17 @@ function Analysis() {
   const [showClaimContent, setShowClaimContent] = useState(false);
   const [independentClaimLists, setIndependentClaimLists] = useState("");
   const [dependentClaimLists, setDependentClaimLists] = useState("");
-  const [showQr, setShowQr] = useState(false);
+  // const [showQr, setShowQr] = useState(false);
   const [selectedSections, setSelectedSections] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [showDrop, setShowDrop] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  // const [showDropdown, setShowDropdown] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [sectionData, setSectionData] = useState([]);
   const [titleChar, setTitleChar] = useState(0);
-  const [isCheckAll, setIsCheckAll] = useState(false)
+  // const [isCheckAll, setIsCheckAll] = useState(false)
+  const [showSummary, setShowSummary] = useState(false);
+  const [fileFound, setFileFound] = useState(false);
   const navigate = useNavigate();
 
   //to handle the Radio Buttons
@@ -70,16 +72,16 @@ function Analysis() {
 
   //to handle the dropdown (close/open)
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(true);
   };
-  const selectAll = ()=>{
-    debugger
-   setSelectedSections(sectionData.sName);
-     
+  const selectAll = () => {
+
+    setSelectedSections(sectionData.sName);
+
   };
 
   const toggleCheckbox = (sectionName) => {
-    debugger
+
     if (selectedSections.includes(sectionName)) {
       setSelectedSections(
         selectedSections.filter((name) => name !== sectionName)
@@ -95,6 +97,9 @@ function Analysis() {
     const fileWithdep = e.target.files[0].name;
     const filename = fileWithdep.replace(".docx", "");
     setFileName(filename);
+    if (file) {
+      setFileFound(true);
+    }
     if (!file) {
       setErrorMessage("Please select a file.");
       return;
@@ -131,7 +136,7 @@ function Analysis() {
 
         const crosssec = crossregex.exec(text);
         if (crosssec) {
-          debugger
+
           const crosssection = crosssec[1];
 
           const filteredContentforCrossSection = crosssection.replace(
@@ -142,15 +147,15 @@ function Analysis() {
             .split(/\s+/)
             .filter(Boolean);
           const crosswordCount = wordsForCross.length;
-          const crossCharCount = filteredContentforCrossSection.replace(/\s/g,"").length;
+          const crossCharCount = filteredContentforCrossSection.replace(/\s/g, "").length;
           const crossSentCount = filteredContentforCrossSection.split(".").length;
-          const crossLineCount = filteredContentforCrossSection.split("\n").filter((line)=>line.trim()!=="").length;
-          
-        const a = text.split("\n");
-        const b = a.filter((line) => line.trim() !== "").length;
+          const crossLineCount = filteredContentforCrossSection.split("\n").filter((line) => line.trim() !== "").length;
+
+          const a = text.split("\n");
+          const b = a.filter((line) => line.trim() !== "").length;
           const cr = crosssec[0].match(/^(.*?)(?=\n|$)/);
           const cr1 = cr[1].trim();
-          sectionData.push({ sName: cr1, sCount: crosswordCount , sChar:crossCharCount, sSent:crossSentCount, sLine:crossLineCount });
+          sectionData.push({ sName: cr1, sCount: crosswordCount, sChar: crossCharCount, sSent: crossSentCount, sLine: crossLineCount });
           setCrossWord(crosswordCount);
           console.log("aea", crosswordCount);
         }
@@ -159,27 +164,28 @@ function Analysis() {
         const fieldregex =
           /(?:FIELD|TECHNICAL FIELD|FIELD OF THE INVENTION|Field|Technical Field)([\s\S]*?)(?:BACKGROUND|Background|BRIEF DESCRIPTION OF THE INVENTION|Summary|SUMMARY|DESCRIPTION OF (?: THE) DRAWING|Description of (?: the) Drawing|DETAILED DESCRIPTION|detailed description|What is claimed is|CLAIMS|Abstract|ABSTRACT|CROSS-REFERENCE TO RELATED APPLICATION|$)/;
         const fieldsec = fieldregex.exec(text);
+        console.log("filed count", fieldWord)
         if (fieldsec) {
           const fieldsection = fieldsec[1];
           const filteredContentforFieldSection = fieldsection.replace(
             /\[\d+\]|\b(?:[1-4]|[6-9])?\d{1,}(?:(?<!\[\d+)\b5\b)?\b/g,
             ""
           );
-          debugger
+
           const wordsForField = filteredContentforFieldSection
             .split(/\s+/)
             .filter(Boolean);
           const fieldWordCount = wordsForField.length;
-          const fieldCharCount = filteredContentforFieldSection.replace(/\s/g,"").length;
+          const fieldCharCount = filteredContentforFieldSection.replace(/\s/g, "").length;
           const fieldSentCount = filteredContentforFieldSection.split(".").length;
-          const fieldlineCount = filteredContentforFieldSection.split("\n").filter((line)=>line.trim()!=="").length;
+          const fieldlineCount = filteredContentforFieldSection.split("\n").filter((line) => line.trim() !== "").length;
 
           setFieldWord(fieldWordCount);
           const fi = fieldsec[0].match(/^(.*?)(?=\n|$)/);
           const fi1 = fi[1].trim();
-          sectionData.push({ sName: fi1, sCount: fieldWordCount, sChar:fieldCharCount , sSent:fieldSentCount, sLine:fieldlineCount });
+          sectionData.push({ sName: fi1, sCount: fieldWordCount, sChar: fieldCharCount, sSent: fieldSentCount, sLine: fieldlineCount });
 
-          console.log("fiel", fieldWordCount);
+          console.log("field", fieldWordCount);
         }
         //regular expression to extract Background Section
         const backgrdregex =
@@ -223,7 +229,7 @@ function Analysis() {
           console.log("sum", summaryWordCount);
         }
 
-        //regular expression to extract Drawing Description  Section
+        //regular expression to extract Drawing Description Section
         const dodregex =
           /(?:Description of(?: the)? Drawings|DESCRIPTION OF(?: THE)? DRAWINGS)([\s\S]*?)(?:DETAILED DESCRIPTION|\nDetailed Description|DESCRIPTION OF EMBODIMENTS|DESCRIPTION OF IMPLEMENTATIONS|DETAILED DESCRIPTION OF SPECIFIC EMBODIMENTS|What is claimed is|CLAIMS|ABSTRACT|CROSS-REFERENCE TO RELATED APPLICATION|FIELD|BACKGROUND|SUMMARY|BRIEF DESCRIPTION THE INVENTION|$)/;
         const dodsec = dodregex.exec(text);
@@ -272,7 +278,7 @@ function Analysis() {
         const claimsec = claimregex.exec(text);
 
         if (claimsec) {
-          debugger
+
           const claimsection = claimsec[1];
           const claimsection1 = claimsection.replace(
             /what is claimed is:/i,
@@ -281,7 +287,6 @@ function Analysis() {
           const linesa = claimsection1
             .split(/(?<=\.)\s+/)
             .filter((line) => line.includes("."));
-
 
           const filteredLines = linesa.filter(
             (line) =>
@@ -298,9 +303,12 @@ function Analysis() {
           let dependentClaimCount = 0;
           const independentClaims = [];
           const dependentClaims = [];
+          console.log("length ", filteredLines.length);
 
           for (let i = 0; i < filteredLines.length; i++) {
             const line = filteredLines[i];
+            console.log("line is", line);
+
             const words = line.split(/\s+/).filter(Boolean);
             const wordCount = words.length;
             if (/claim\s+(\d+)/i.test(line)) {
@@ -308,6 +316,8 @@ function Analysis() {
               dependentClaimCount++;
             } else {
               independentClaims.push(`claim ${i + 1} - ${wordCount} words`);
+              console.log("independent claims", independentClaims);
+              console.log("word counts", wordCount);
               independentClaimCount++;
             }
           }
@@ -382,15 +392,12 @@ function Analysis() {
           const figsRomanRegex =
             /FIGS(?:URES?)?\.\s(?:\d+|[IVXLCDM]+)(?:[A-Za-z]?(?:\sAND\s(?:\d+|[IVXLCDM]+)[A-Za-z]?)+)?/i;
 
-
           const matches2 = descriptionText.match(figsRomanRegex);
           const unique = [...new Set(matches2)];
           console.log("aaa", unique);
           const Rx2 = unique.length * 2;
           const totalFigs = Rx1 + Rx2;
           setImgCount(totalFigs);
-
-
 
           const imageRegex =
             /FIGS\.\s?\d+([A-Za-z\(\)]+)?\s?(?:to(?!.*and)|-(?!.*and))\s?\d+([A-Za-z\(\)]+)?/gi;
@@ -420,12 +427,12 @@ function Analysis() {
     reader.readAsArrayBuffer(file);
   };
 
+  const handleSummary = () => {
+    setShowSummary((prevValue) => !prevValue);
+  }
+
   return (
     <div className="App">
-      <div>
-        <button onClick={() => navigate("/Mannual")}>Enter manually</button>
-      </div>
-
       <div
         style={{
           letterSpacing: 0,
@@ -434,18 +441,45 @@ function Analysis() {
           backgroundColor: "",
           color: "white",
           padding: "20px",
-          textAlign: "center",
-          textDecoration: "underline",
+          fontWeight:"bold",
           textDecorationColor: "#03e9f4",
         }}
       >
         <h1>Patent Reader</h1>
       </div>
-
-      <input type="file" onChange={handleFileChange} />
+      <div>
+        <button className="manually button" onClick={() => navigate("/Mannual")}>Enter manually</button>
+      </div>
+      <input type="file" accept=".docx" onChange={handleFileChange} />
       {errorMessage && <p className="error">{errorMessage}</p>}
-
-      <div className="result" style={{ marginBottom: "4%" }}>
+      {!errorMessage && fileFound ? (<>
+        <div className="result" style={{ marginBottom: "4%" }}>
+          <p>Title: {modifiedTitle}</p>
+          <p> Word Count :{wordCount}</p>
+          <p>Character Count :{titleChar}</p>
+        </div>
+        <div className="radio-buttons" style={{ marginBottom: "4%" }}>
+          <label className="radio">
+            <input
+              type="radio"
+              name="radioGroup"
+              value="option1"
+              onChange={handleRadioChange}
+            />
+            All Section Analysis
+          </label>
+          <label className="radio">
+            <input
+              type="radio"
+              name="radioGroup"
+              value="option2"
+              onChange={handleRadioChange}
+            />
+            Specific Section Analysis
+          </label>
+        </div>
+      </>) : <h5 style={{ color: "white" }}>Attach a word file to scan</h5>}
+      {/* <div className="result" style={{ marginBottom: "4%" }}>
         <p>Title: {modifiedTitle}</p>
         <p> Word Count :{wordCount}</p>
         <p>Character Count :{titleChar}</p>
@@ -469,24 +503,30 @@ function Analysis() {
           />
           Specific Section Analysis
         </label>
-      </div>
+      </div> */}
       {showResult && (
         <div className="result">
+          <h3 style={{ color: "white" }}>Below is the section wise total word count</h3>
           <p>Cross-Reference :<strong>{crossWord}</strong> </p>
-          <p>Technical Field :<strong>{fieldWord}</strong></p>
-          <p>Background :<strong>{backgroundWord}</strong></p>
-          <p>Summary : <strong>{summaryWord}</strong></p>
-          <p>Description of Drawing :<strong> {drofDraWord}</strong></p>
+          {/\d/.test(fieldWord) && <p>Technical Field: <strong>{fieldWord}</strong></p>}
+          {/\d/.test(backgroundWord) && <p>Background : <strong>{backgroundWord}</strong></p>}
+          {/\d/.test(summaryWord) && <p>Summary : <strong>{summaryWord}</strong></p>}
+          {/\d/.test(drofDraWord) && <p>Description of Drawing : <strong>{drofDraWord}</strong></p>}
+
           <p>Total Number of Figures:<strong>{imgCount}</strong></p>
-          <p> Detailed Description : <strong>{detaDesWord}</strong></p>
-          <p>Claims :<strong>{claimedWord}</strong></p>
-          <p>Abstract : <strong>{abstractWord}</strong></p>
-          <p>Total lines: <strong>{lineCount}</strong></p>
-          <p>
-            Total word count: <strong>{fileContent.split(/\s+/).filter(Boolean).length}</strong>
-          </p>
-          <p>Total character count: <strong>{fileContent.replace(/\s/g, "").length}</strong></p>
-          <p>Total sentence count: <strong>{sentenceCount}</strong></p>
+
+          {/\d/.test(detaDesWord) && <p>Detailed Description : <strong>{detaDesWord}</strong></p>}
+          {/\d/.test(claimedWord) && <p>Claims : <strong>{claimedWord}</strong></p>}
+          {/\d/.test(abstractWord) && <p>Abstract : <strong>{abstractWord}</strong></p>}
+          {/\d/.test(lineCount) && <p>Total lines: <strong>{lineCount}</strong></p>}
+
+          <button onClick={handleSummary}>{showSummary ? "Close the Summary Of calculations" : "Click here to view summary of the calculations"}</button>
+          {showSummary && (<>
+            <p>
+              Total word count: <strong>{fileContent.split(/\s+/).filter(Boolean).length}</strong>
+            </p>
+            <p>Total character count: <strong>{fileContent.replace(/\s/g, "").length}</strong></p>
+            <p>Total sentence count: <strong>{sentenceCount}</strong></p> </>)}
         </div>
       )}
       {showDrop && (
@@ -528,9 +568,9 @@ function Analysis() {
           </div>
           <div className="result">
             <div style={{
-              textDecoration: "underline",
               textDecorationColor: "#0a0909",
-              marginBottom: '2%'
+              marginBottom: '2%',
+              fontWeight:"bold"
             }}>
               Word Count of Selected Sections:
             </div>
@@ -550,7 +590,32 @@ function Analysis() {
         </div>
       )}
 
-      <div
+
+      {fileFound && !errorMessage && (
+        <>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginTop: "2%",
+            }}
+          >
+            <div>
+              <button onClick={() => setShowFileContent(!showFileContent)}>
+                {showFileContent ? "hide" : "view"} content
+              </button>
+            </div>
+            <div>
+              <button onClick={() => setShowClaimContent(!showClaimContent)}>
+                {showClaimContent ? "hide" : "view"} Claims
+              </button>
+            </div>
+
+          </div>
+        </>
+      )}
+      {/* <div
         style={{
           display: "flex",
           flexDirection: "row",
@@ -569,7 +634,7 @@ function Analysis() {
           </button>
         </div>
 
-      </div>
+      </div> */}
 
       {showFileContent && (
         <div className="file-content" style={{ textAlign: "center" }}>
@@ -621,11 +686,11 @@ function Analysis() {
           <p>
             <b>Independent Claims List:</b>
           </p>
-          <pre>{independentClaimLists}</pre>
+          <pre style={{ color: "white", backgroundColor:"GrayText" }}>{independentClaimLists}</pre>
           <p>
             <b>Dependent Claims:</b>
           </p>
-          <pre>{dependentClaimLists}</pre>
+          <pre style={{  color: "white", backgroundColor:"GrayText" }}>{dependentClaimLists}</pre>
         </div>
       )}
     </div>

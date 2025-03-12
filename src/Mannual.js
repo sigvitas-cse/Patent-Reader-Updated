@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Mannual.css";
+import "./Analysis.css";
 import mammoth from "mammoth";
 import { useNavigate } from "react-router-dom";
 
@@ -20,12 +20,12 @@ const Mannual = () => {
   const [showMfileContent, setShowMfileContent] = useState(false);
   const [showMclaimContent, setShowMclaimContent] = useState(false);
   const [mFileContent, setMfileContent] = useState("");
-  const [mTotal,setMtotal] = useState(0);
-  const [mIndependent,setMindependent] = useState(0);
-  const [mDependent,setMdependent] = useState(0);
-  const [mIndependetClaimList,setMindependentClaimList] = useState("");
-  const [mDependentClaimList,setMdependentClaimList] = useState("");
-  const [mTitleChar,setMtitleChar] = useState(0);
+  const [mTotal, setMtotal] = useState(0);
+  const [mIndependent, setMindependent] = useState(0);
+  const [mDependent, setMdependent] = useState(0);
+  const [mIndependetClaimList, setMindependentClaimList] = useState("");
+  const [mDependentClaimList, setMdependentClaimList] = useState("");
+  const [mTitleChar, setMtitleChar] = useState(0);
 
   //to handle user inputs
   const handleInputChange = (index, value) => {
@@ -33,7 +33,7 @@ const Mannual = () => {
     updatedValues[index] = value;
     setInputValues(updatedValues);
   };
-// to add new inputs to array
+  // to add new inputs to array
   const handleAddInput = () => {
     setInputValues([...inputValues, ""]);
   };
@@ -42,7 +42,7 @@ const Mannual = () => {
     const formhide = document.getElementById("formContainer");
     formhide.style.display = "none";
   };
-// to handle the submit function
+  // to handle the submit function
   const handleSubmit = (event) => {
     debugger;
     event.preventDefault();
@@ -52,7 +52,7 @@ const Mannual = () => {
       console.log("At least one section title is required.");
       return;
     }
-//array to store the sections titles
+    //array to store the sections titles
 
     let totalWordsCounts = [];
     const MtitleR = new RegExp(`([\\s\\S]*?)${trimmedValues[0]}`, "i");
@@ -61,7 +61,7 @@ const Mannual = () => {
       const MtitleNames = MtitleSec[1];
       const MtitleName = MtitleNames.replace(/\[\d+\]/g, "");
       const mwordss = MtitleName.split(/\s+/).filter(Boolean);
-      const mtitle = MtitleName.replace(/\s/g,"");
+      const mtitle = MtitleName.replace(/\s/g, "");
       setMtitleChar(mtitle.length);
       setMtitle(MtitleName);
       setMtitleCount(mwordss.length);
@@ -79,7 +79,7 @@ const Mannual = () => {
       const Mregex = new RegExp(
         `\\b${currentSectionTitle}\\b([\\s\\S]*?)(\\b${nextSectionTitle}\\b|TECHNICAL FIELD|FIELD|BACKGROUND|SUMMARY|BRIEF DESCRIPTION OF(?: THE)? DRAWINGS|DETAILED DESCRIPTION|CLAIMS|ABSTRACT|$)`
 
-       
+
       );
       const sectionSec = Mregex.exec(text);
       if (sectionSec) {
@@ -94,99 +94,99 @@ const Mannual = () => {
         totalWordsCounts.push({
           sectionTitle: currentSectionTitle,
           wordCount: MwordCount,
-          sectionWords:sectionText,
+          sectionWords: sectionText,
         });
         setSection(totalWordsCounts);
 
-        const drawingWord = new RegExp("drawing","i");
-        totalWordsCounts.forEach(item=>{
-          if(drawingWord.test(item.sectionTitle)){
+        const drawingWord = new RegExp("drawing", "i");
+        totalWordsCounts.forEach(item => {
+          if (drawingWord.test(item.sectionTitle)) {
             const drwingSection = item.sectionWords
             const imageRegex1 =
-            /(?:FIG(?:URE)?)\.?[-\s]?(?:\d+|[IVXLCDM]+)[A-Z]?(?:\([\w\s]+\))?\b/gi;
-          const matches = drwingSection.match(imageRegex1);
-          const uniqueMatches = [...new Set(matches)];
-          debugger;
-          const matchesWithoutanyWord = uniqueMatches.filter(
-            (match) =>
-              !/\bfigured\b/i.test(match) && !/\bfiguring\b/i.test(match)
-          );
+              /(?:FIG(?:URE)?)\.?[-\s]?(?:\d+|[IVXLCDM]+)[A-Z]?(?:\([\w\s]+\))?\b/gi;
+            const matches = drwingSection.match(imageRegex1);
+            const uniqueMatches = [...new Set(matches)];
+            debugger;
+            const matchesWithoutanyWord = uniqueMatches.filter(
+              (match) =>
+                !/\bfigured\b/i.test(match) && !/\bfiguring\b/i.test(match)
+            );
 
-          console.log("aa", matchesWithoutanyWord);
-          const Rx1 = matchesWithoutanyWord.length;
+            console.log("aa", matchesWithoutanyWord);
+            const Rx1 = matchesWithoutanyWord.length;
 
-          const figsRomanRegex =
-            /FIGS(?:URES?)?\.\s(?:\d+|[IVXLCDM]+)(?:[A-Za-z]?(?:\sAND\s(?:\d+|[IVXLCDM]+)[A-Za-z]?)+)?/i;
+            const figsRomanRegex =
+              /FIGS(?:URES?)?\.\s(?:\d+|[IVXLCDM]+)(?:[A-Za-z]?(?:\sAND\s(?:\d+|[IVXLCDM]+)[A-Za-z]?)+)?/i;
 
-          const matches2 = drwingSection.match(figsRomanRegex);
-          const unique = [...new Set(matches2)];
-          console.log("aaa", unique);
-          const Rx2 = unique.length * 2;
-          const totalFigs = Rx1 + Rx2;
-          setMfigure(totalFigs);
+            const matches2 = drwingSection.match(figsRomanRegex);
+            const unique = [...new Set(matches2)];
+            console.log("aaa", unique);
+            const Rx2 = unique.length * 2;
+            const totalFigs = Rx1 + Rx2;
+            setMfigure(totalFigs);
           }
         })
 
-     
-        const claimWord = new RegExp("claim","i");
-       
-        totalWordsCounts.forEach(item =>{
+
+        const claimWord = new RegExp("claim", "i");
+
+        totalWordsCounts.forEach(item => {
           debugger
-          if(claimWord.test(item.sectionTitle)){
-           const claimsection = item.sectionWords
-           const claimsection1 = claimsection.replace(
-            /what is claimedis:/i, ""
-           )
-       
-          console.log("claimssection",claimsection)
+          if (claimWord.test(item.sectionTitle)) {
+            const claimsection = item.sectionWords
+            const claimsection1 = claimsection.replace(
+              /what is claimedis:/i, ""
+            )
 
-          const linesa = claimsection1
-            .split(/(?<=\.)\s+/)
-            .filter((line) => line.includes("."));
-        const filteredLines = linesa.filter(
-            (line) =>
-              line.trim().length >= 40 &&
-              !/^\s*[\d\n\t\s]+\.?$|^:\s*\n{1,10}CLAIMS\s*\n{1,10}1\./.test(
-                line
-              ) 
-          );
+            console.log("claimssection", claimsection)
 
-          console.log("claims", linesa);
-          console.log("claims1", filteredLines);
+            const linesa = claimsection1
+              .split(/(?<=\.)\s+/)
+              .filter((line) => line.includes("."));
+            const filteredLines = linesa.filter(
+              (line) =>
+                line.trim().length >= 40 &&
+                !/^\s*[\d\n\t\s]+\.?$|^:\s*\n{1,10}CLAIMS\s*\n{1,10}1\./.test(
+                  line
+                )
+            );
 
-          let independentClaimCount = 0;
-          let dependentClaimCount = 0;
-          const independentClaims = [];
-          const dependentClaims = [];
+            console.log("claims", linesa);
+            console.log("claims1", filteredLines);
 
-          for (let i = 0; i < filteredLines.length; i++) {
-            const line = filteredLines[i];
-            const words = line.split(/\s+/).filter(Boolean);
-            const wordCount = words.length;
-            if (/claim\s+(\d+)/i.test(line)) {
-              dependentClaims.push(`claim ${i + 1} - ${wordCount} words`);
-              dependentClaimCount++;
-            } else {
-              independentClaims.push(`claim ${i + 1} - ${wordCount} words`);
-              independentClaimCount++;
+            let independentClaimCount = 0;
+            let dependentClaimCount = 0;
+            const independentClaims = [];
+            const dependentClaims = [];
+
+            for (let i = 0; i < filteredLines.length; i++) {
+              const line = filteredLines[i];
+              const words = line.split(/\s+/).filter(Boolean);
+              const wordCount = words.length;
+              if (/claim\s+(\d+)/i.test(line)) {
+                dependentClaims.push(`claim ${i + 1} - ${wordCount} words`);
+                dependentClaimCount++;
+              } else {
+                independentClaims.push(`claim ${i + 1} - ${wordCount} words`);
+                independentClaimCount++;
+              }
             }
-          }
 
-          setMtotal(filteredLines.length);
-          setMindependent(independentClaimCount);
-          setMdependent(dependentClaimCount);
-          setMindependentClaimList(independentClaims.join("\n"));
-          setMdependentClaimList(dependentClaims.join("\n "));
-          
-        }
+            setMtotal(filteredLines.length);
+            setMindependent(independentClaimCount);
+            setMdependent(dependentClaimCount);
+            setMindependentClaimList(independentClaims.join("\n"));
+            setMdependentClaimList(dependentClaims.join("\n "));
+
+          }
         })
       } else {
         setErrorMessage(`Section title not found: ${currentSectionTitle}`);
       }
     }
-  hideForm();
+    hideForm();
   };
-  
+
   const handleMannualFileChange = async (e) => {
     const file = e.target.files[0];
     const fileWithdep = e.target.files[0].name;
@@ -204,8 +204,8 @@ const Mannual = () => {
       try {
         debugger;
         const result = await mammoth.extractRawText({ arrayBuffer: content });
-         setText(result.value);
-    setMfileContent(result.value);
+        setText(result.value);
+        setMfileContent(result.value);
 
         console.log("manual", text);
       } catch (error) {
@@ -221,22 +221,22 @@ const Mannual = () => {
   };
   return (
     <div className="App">
-      <button onClick={() => navigate("/")}>Go Back</button>
       <div
-        style={{
-          letterSpacing: 0,
-          top: 0,
-          width: "100%",
-          backgroundColor: "",
-          color: "white",
-          padding: "20px",
-          textAlign: "center",
-          textDecoration: "underline",
-          textDecorationColor: "#03e9f4",
-        }}
+        // style={{
+        //   letterSpacing: 0,
+        //   top: "20px",
+        //   width: "100%",
+        //   backgroundColor: "white",
+        //   color: "white",
+        //   padding: "20px",
+        //   textAlign: "center",
+        //   textDecorationColor: "#03e9f4",
+        // }}
       >
         <h1>Patent Reader</h1>
       </div>
+      <button onClick={() => navigate("/")}>Go Back</button>
+
       <input type="file" onChange={handleMannualFileChange} />
       {errorMessage && <p className="error">{errorMessage}</p>}
       <form
@@ -350,7 +350,7 @@ const Mannual = () => {
           </p>
         </div>
       )}
- {showMclaimContent && (
+      {showMclaimContent && (
         <div className="claim-content">
           <h2>CLAIMS:</h2>
           <p>Total Claims :{mTotal}</p>

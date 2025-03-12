@@ -13,10 +13,25 @@ body{
     align-items: center;
     height: 100vh;
     background: #303c66;
+    background-image:url('../public/bcg.png'); 
     font-family: 'Raleway', sans-serif;
 }
 
 button{
+  margin: 5%;
+  /* padding: 25px 30px; */
+  background-color: #50619f;
+  color: #03e9f4;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  letter-spacing: 4px;
+  overflow: hidden;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.manually button{
   margin: 5%;
   padding: 25px 30px;
   background-color: #50619f;
@@ -30,20 +45,41 @@ button{
   cursor: pointer;
 }
 
-button:hover{
-    background: #03e9f4;
-    color: #050801;
-    box-shadow: 0 0 5px #03e9f4,
-                0 0 25px #03e9f4,
-                0 0 50px #03e9f4,
-                0 0 200px #03e9f4;
-     -webkit-box-reflect:below 1px linear-gradient(transparent, #0005);
+.manually-button::after {
+  content: "Click here to manually check the details"; 
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  bottom: 100%; /* Position above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.manually-button:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 
-.App {
-  
-  margin-top: 2%;
+button:hover{
+    background: #67a8ab;
+    color: #050801;
+    box-shadow: 0 0 1px #03e9f4,
+                0 0 1px #03e9f4,
+                0 0 1px #03e9f4,
+                0 0 1px #03e9f4;
+}
+
+
+.App { 
+  margin-top: 20%;
   text-align: center;
   font-family: Arial, sans-serif;
   font-style: italic;
@@ -53,7 +89,6 @@ button:hover{
 h1 {
   color: #5be4dd;
 }
-
 
 input[type="file"] {
   border: none;
@@ -77,7 +112,6 @@ div > h2 {
 p {
   font-size: 18px;
   margin: 5px 0;
-  
 }
 
 pre {
@@ -119,7 +153,7 @@ background-color: #92b0dc;
 .buttonContainer {
   display: flex;
   flex-direction: row;
-  margin-top: 10px; 
+  /* margin-top: 10px;  */
 }
 
 .smallButton {
