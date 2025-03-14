@@ -132,13 +132,12 @@ function Analysis() {
         const sectionData = [];
         //regular expression to extract Cross-reference
         const crossregex =
-          /(?:CROSS-REFERENCE TO RELATED APPLICATION|CROSS REFERENCE TO RELATED APPLICATION|Cross-reference to related application|Cross-Reference To Related Application|Related Applications)([\s\S]*?)(?:TECHNICAL FIELD|FIELD|Field|Background|BACKGROUND|Summary|SUMMARY|DESCRIPTION OF (?: THE) DRAWING|Description Of(?: The)? Drawing|DETAILED DESCRIPTION|WHAT IS CLAIMED IS|ABSTRACT|$)/;
+          /(?:CROSS-REFERENCE TO RELATED APPLICATION|CROSS-REFERENCE TO RELATED APPLICATIONS|CROSS REFERENCE TO RELATED APPLICATION|Cross-reference to related application|Cross-Reference To Related Application|Related Applications)([\s\S]*?)(?:TECHNICAL FIELD|FIELD|Field|Background|BACKGROUND|Summary|SUMMARY|DESCRIPTION OF (?: THE) DRAWING|Description Of(?: The)? Drawing|DETAILED DESCRIPTION|WHAT IS CLAIMED IS|ABSTRACT|$)/;
 
         const crosssec = crossregex.exec(text);
         if (crosssec) {
 
           const crosssection = crosssec[1];
-
           const filteredContentforCrossSection = crosssection.replace(
             /\[\d+\]|\b(?:[1-4]|[6-9])?\d{1,}(?:(?<!\[\d+)\b5\b)?\b/g,
             ""
@@ -441,16 +440,21 @@ function Analysis() {
           backgroundColor: "",
           color: "white",
           padding: "20px",
-          fontWeight:"bold",
+          fontWeight: "bold",
           textDecorationColor: "#03e9f4",
         }}
       >
         <h1>Patent Reader</h1>
       </div>
-      <div>
-        <button className="manually button" onClick={() => navigate("/Mannual")}>Enter manually</button>
-      </div>
+      {/* <div>
+        <button className="manually button" style={{marginTop}} onClick={() => navigate("/Mannual")}>Enter manually</button>
+      </div> */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "gba(255, 255, 255, 0.1)"}}>
       <input type="file" accept=".docx" onChange={handleFileChange} />
+      <div>
+        <button className="manually button" style={{}} onClick={() => navigate("/Mannual")}>Enter manually</button>
+      </div>
+      </div>
       {errorMessage && <p className="error">{errorMessage}</p>}
       {!errorMessage && fileFound ? (<>
         <div className="result" style={{ marginBottom: "4%" }}>
@@ -478,7 +482,7 @@ function Analysis() {
             Specific Section Analysis
           </label>
         </div>
-      </>) : <h5 style={{ color: "white" }}>Attach a word file to scan</h5>}
+      </>) : <h5 style={{ color: "black"}}>Attach a word file to scan </h5>}
       {/* <div className="result" style={{ marginBottom: "4%" }}>
         <p>Title: {modifiedTitle}</p>
         <p> Word Count :{wordCount}</p>
@@ -570,7 +574,7 @@ function Analysis() {
             <div style={{
               textDecorationColor: "#0a0909",
               marginBottom: '2%',
-              fontWeight:"bold"
+              fontWeight: "bold"
             }}>
               Word Count of Selected Sections:
             </div>
@@ -640,8 +644,7 @@ function Analysis() {
         <div className="file-content" style={{ textAlign: "center" }}>
           <h2
             style={{
-              color: "white",
-              textDecoration: "underline",
+              color: "black",
               textDecorationColor: "#03e9f4",
             }}
           >
@@ -686,11 +689,11 @@ function Analysis() {
           <p>
             <b>Independent Claims List:</b>
           </p>
-          <pre style={{ color: "white", backgroundColor:"GrayText" }}>{independentClaimLists}</pre>
+          <pre style={{ color: "white", backgroundColor: "GrayText" }}>{independentClaimLists}</pre>
           <p>
             <b>Dependent Claims:</b>
           </p>
-          <pre style={{  color: "white", backgroundColor:"GrayText" }}>{dependentClaimLists}</pre>
+          <pre style={{ color: "white", backgroundColor: "GrayText" }}>{dependentClaimLists}</pre>
         </div>
       )}
     </div>
