@@ -136,7 +136,6 @@ function Analysis() {
 
         const crosssec = crossregex.exec(text);
         if (crosssec) {
-
           const crosssection = crosssec[1];
           const filteredContentforCrossSection = crosssection.replace(
             /\[\d+\]|\b(?:[1-4]|[6-9])?\d{1,}(?:(?<!\[\d+)\b5\b)?\b/g,
@@ -156,7 +155,7 @@ function Analysis() {
           const cr1 = cr[1].trim();
           sectionData.push({ sName: cr1, sCount: crosswordCount, sChar: crossCharCount, sSent: crossSentCount, sLine: crossLineCount });
           setCrossWord(crosswordCount);
-          console.log("aea", crosswordCount);
+          console.log("cross section word count", crosswordCount);
         }
 
         //regular expression to extract Field Section
@@ -387,7 +386,6 @@ function Analysis() {
           console.log("aa", matchesWithoutanyWord);
           const Rx1 = matchesWithoutanyWord.length;
 
-
           const figsRomanRegex =
             /FIGS(?:URES?)?\.\s(?:\d+|[IVXLCDM]+)(?:[A-Za-z]?(?:\sAND\s(?:\d+|[IVXLCDM]+)[A-Za-z]?)+)?/i;
 
@@ -449,11 +447,11 @@ function Analysis() {
       {/* <div>
         <button className="manually button" style={{marginTop}} onClick={() => navigate("/Mannual")}>Enter manually</button>
       </div> */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "gba(255, 255, 255, 0.1)"}}>
-      <input type="file" accept=".docx" onChange={handleFileChange} />
-      <div>
-        <button className="manually button" style={{}} onClick={() => navigate("/Mannual")}>Enter manually</button>
-      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "gba(255, 255, 255, 0.1)" }}>
+        <input type="file" accept=".docx" onChange={handleFileChange} />
+        <div>
+          <button className="manually button" style={{}} onClick={() => navigate("/Mannual")}>Enter manually</button>
+        </div>
       </div>
       {errorMessage && <p className="error">{errorMessage}</p>}
       {!errorMessage && fileFound ? (<>
@@ -482,7 +480,7 @@ function Analysis() {
             Specific Section Analysis
           </label>
         </div>
-      </>) : <h5 style={{ color: "black"}}>Attach a word file to scan </h5>}
+      </>) : <h5 style={{ color: "black" }}>Attach a word file to scan </h5>}
       {/* <div className="result" style={{ marginBottom: "4%" }}>
         <p>Title: {modifiedTitle}</p>
         <p> Word Count :{wordCount}</p>
@@ -510,7 +508,7 @@ function Analysis() {
       </div> */}
       {showResult && (
         <div className="result">
-          <h3 style={{ color: "white" }}>Below is the section wise total word count</h3>
+          <h3 style={{ textDecorationColor: "#03e9f4"}}>Below is the section wise total word count</h3>
           <p>Cross-Reference :<strong>{crossWord}</strong> </p>
           {/\d/.test(fieldWord) && <p>Technical Field: <strong>{fieldWord}</strong></p>}
           {/\d/.test(backgroundWord) && <p>Background : <strong>{backgroundWord}</strong></p>}
@@ -555,7 +553,6 @@ function Analysis() {
 
                   {sectionData.map((section, index) => (
                     <li key={index}>
-
                       <label>
                         <input
                           type="checkbox"
@@ -574,7 +571,8 @@ function Analysis() {
             <div style={{
               textDecorationColor: "#0a0909",
               marginBottom: '2%',
-              fontWeight: "bold"
+              fontWeight: "bold",
+
             }}>
               Word Count of Selected Sections:
             </div>
@@ -593,7 +591,6 @@ function Analysis() {
           </div>
         </div>
       )}
-
 
       {fileFound && !errorMessage && (
         <>

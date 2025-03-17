@@ -8,9 +8,10 @@
 
 body {
     display: flex;
-    justify-content: center;
-    align-items: center; /* Enable proper vertical alignment */
-    height: 100vh;
+    justify-content: center;  /* Center horizontally */
+    align-items: center;  /* Center vertically */
+    min-height: 100vh;  /* Ensure full height */
+    margin: 0;
     background: linear-gradient(to right, #2c3e50, #4ca1af);
     font-family: 'Poppins', sans-serif;
     color: #1f1e1e;
@@ -18,6 +19,24 @@ body {
     background-size: cover;
     background-position: center;
 }
+
+.container {
+    width: 90%;
+    max-width: 800px; /* Adjust as needed */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Allows scrolling when content exceeds the viewport */
+.container {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+
 
 button {
     margin: 5%;
@@ -42,7 +61,7 @@ button:hover {
 
 .App {
     text-align: center;
-    width: 80%;
+    width: 100%;
     max-width: 600px;
     margin: auto;
     padding: 40px;
@@ -169,9 +188,9 @@ select, details {
     transition: 0.3s;
 }
 
-select:hover, summary:hover {
+/* select:hover, summary:hover {
     background: #2c3e50;
-}
+} */
 
 ul {
     list-style: none;
@@ -186,7 +205,7 @@ ul {
     text-align: left;
     border: 1px solid var(--dark-gray);
     background: rgba(240, 248, 255, 0.95);
-    color: #fff;
+    color: #2b2929;
     border-radius: 6px;
     padding: 10px;
 }
@@ -199,5 +218,5 @@ ul {
 
 .custom-dropdown-list li label:hover {
     background: var(--primary);
-    color: black;
+    /* color: black; */
 }
