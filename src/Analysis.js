@@ -136,15 +136,22 @@ function Analysis() {
 
         const crosssec = crossregex.exec(text);
         if (crosssec) {
-          const crosssection = crosssec[1];
+          let crosssection = crosssec[1].replace(/^\s*[A-Za-z]?\s*\n*/, "").trim();
           const filteredContentforCrossSection = crosssection.replace(
             /\[\d+\]|\b(?:[1-4]|[6-9])?\d{1,}(?:(?<!\[\d+)\b5\b)?\b/g,
             ""
           );
           const wordsForCross = filteredContentforCrossSection
+            .replace(/[^\w\s]/g, "") // Remove special characters (except spaces)
             .split(/\s+/)
             .filter(Boolean);
           const crosswordCount = wordsForCross.length;
+          console.log("Raw Extracted Cross-Section Text:", JSON.stringify(crosssection));
+
+          console.log("Extracted Cross-Section Text:", crosssection);
+          console.log("Extracted Words:", wordsForCross);
+          console.log("Cross-Reference Word Count:", wordsForCross.length);
+
           const crossCharCount = filteredContentforCrossSection.replace(/\s/g, "").length;
           const crossSentCount = filteredContentforCrossSection.split(".").length;
           const crossLineCount = filteredContentforCrossSection.split("\n").filter((line) => line.trim() !== "").length;
@@ -174,6 +181,7 @@ function Analysis() {
             .split(/\s+/)
             .filter(Boolean);
           const fieldWordCount = wordsForField.length;
+
           const fieldCharCount = filteredContentforFieldSection.replace(/\s/g, "").length;
           const fieldSentCount = filteredContentforFieldSection.split(".").length;
           const fieldlineCount = filteredContentforFieldSection.split("\n").filter((line) => line.trim() !== "").length;
@@ -182,9 +190,10 @@ function Analysis() {
           const fi = fieldsec[0].match(/^(.*?)(?=\n|$)/);
           const fi1 = fi[1].trim();
           sectionData.push({ sName: fi1, sCount: fieldWordCount, sChar: fieldCharCount, sSent: fieldSentCount, sLine: fieldlineCount });
-
+          console.log("filed count", fieldWord);
           console.log("field", fieldWordCount);
         }
+
         //regular expression to extract Background Section
         const backgrdregex =
           /(?:background|background of the invention)([\s\S]*?)(?:summary|brief description of the invention|description of (?: the) drawings|detailed description|what is claimed is|abstract|cross-reference to related application|field|$)/i;
@@ -269,6 +278,7 @@ function Analysis() {
           setDetaDesWord(detDesWordCount);
           console.log("det", detDesWordCount);
         }
+
         //regular expression to extract Claim Section
         const claimregex =
           /(?:What is claimed is|Claims|CLAIMS|WHAT IS CLAIMED IS)([\s\S]*?)(?:\babstract\b|\bABSTRACT\b|Related Applications|Cross-reference to related application|CROSS-REFERENCE TO RELATED APPLICATION|FIELD|Field|BACKGROUND|SUMMARY|$)/;
@@ -508,7 +518,7 @@ function Analysis() {
       </div> */}
       {showResult && (
         <div className="result">
-          <h3 style={{ textDecorationColor: "#03e9f4"}}>Below is the section wise total word count</h3>
+          <h3 style={{ textDecorationColor: "#03e9f4" }}>Below is the section wise total word count</h3>
           <p>Cross-Reference :<strong>{crossWord}</strong> </p>
           {/\d/.test(fieldWord) && <p>Technical Field: <strong>{fieldWord}</strong></p>}
           {/\d/.test(backgroundWord) && <p>Background : <strong>{backgroundWord}</strong></p>}
