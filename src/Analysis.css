@@ -8,21 +8,25 @@
 
 body {
     display: flex;
-    justify-content: center;  /* Center horizontally */
-    align-items: center;  /* Center vertically */
-    min-height: 100vh;  /* Ensure full height */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+    min-height: 100vh;
+    /* Ensure full height */
     margin: 0;
     background: linear-gradient(to right, #2c3e50, #4ca1af);
     font-family: 'Poppins', sans-serif;
     color: #1f1e1e;
-    background-image: url('../public/bcg.png'); 
+    background-image: url('../public/bcg.png');
     background-size: cover;
     background-position: center;
 }
 
 .container {
     width: 90%;
-    max-width: 800px; /* Adjust as needed */
+    max-width: 800px;
+    /* Adjust as needed */
     padding: 20px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
@@ -62,7 +66,7 @@ button:hover {
 .App {
     text-align: center;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     margin: auto;
     padding: 40px;
     background: rgba(255, 255, 255, 0.1);
@@ -71,13 +75,13 @@ button:hover {
 }
 
 h1 {
-    color: #35b0c3;
+    color: #1a717e;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 input[type="file"] {
     border: none;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(29, 26, 26, 0.2);
     padding: 12px;
     font-size: 16px;
     cursor: pointer;
@@ -87,7 +91,7 @@ input[type="file"] {
 }
 
 input[type="file"]:hover {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(36, 32, 32, 0.4);
 }
 
 .error {
@@ -96,7 +100,7 @@ input[type="file"]:hover {
     margin-top: 10px;
 }
 
-div > h2 {
+div>h2 {
     margin-top: 20px;
 }
 
@@ -121,10 +125,11 @@ pre {
     height: 50vh;
     justify-content: center;
     overflow-y: auto;
-    background: rgba(0, 0, 0, 0.3); /* Darker background for readability */
+    background: rgba(0, 0, 0, 0.3);
+    /* Darker background for readability */
     padding: 15px;
     border-radius: 8px;
-    color: black; 
+    color: black;
 }
 
 
@@ -164,17 +169,18 @@ fieldset {
     border: none;
 }
 
-fieldset > label {
+fieldset>label {
     display: inline-block;
     width: 100px;
     line-height: 28px;
 }
 
-fieldset > label::after {
+fieldset>label::after {
     content: ":";
 }
 
-select, details {
+select,
+details {
     display: inline-block;
     max-width: 100%;
     width: auto;

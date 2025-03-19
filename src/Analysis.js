@@ -281,7 +281,7 @@ function Analysis() {
 
         //regular expression to extract Claim Section
         const claimregex =
-          /(?:What is claimed is|Claims|CLAIMS|WHAT IS CLAIMED IS)([\s\S]*?)(?:\babstract\b|\bABSTRACT\b|Related Applications|Cross-reference to related application|CROSS-REFERENCE TO RELATED APPLICATION|FIELD|Field|BACKGROUND|SUMMARY|$)/;
+          /(?:What is claimed is|Claims|CLAIMS|WHAT IS CLAIMED IS)([\s\S]*?)(?:\babstract\b|\bABSTRACT\b|\bABSTRACT OF THE DISCLOSURE\b|Related Applications|Cross-reference to related application|CROSS-REFERENCE TO RELATED APPLICATION|FIELD|Field|BACKGROUND|SUMMARY|$)/;
 
         const claimsec = claimregex.exec(text);
 
@@ -354,28 +354,46 @@ function Analysis() {
 
         // regular expression to extract Abstract Section
         const abstractregex =
-          /(?: Abstract|ABSTRACT|Abstract of the Disclosure)([\s\S]*?)(?:What is claimed is|Claims|CLAIMS|CROSS-REFERENCE |cross-reference to related application|field|background|summary|description of the drawing|$)/;
+          /(?: Abstract|ABSTRACT|Abstract of the Disclosure)\s*([\s\S]*?)(?:What is claimed is|Claims|CLAIMS|CROSS-REFERENCE |cross-reference to related application|field|background|summary|description of the drawing|$)/;
 
         const abssec = abstractregex.exec(text);
         if (abssec) {
-          const abssection = abssec[1];
+          let abssection = abssec[1].trim(); // Extracted abstract content
+
+          // Remove unwanted words from the beginning
+          const unwantedWords = ["OF", "THE", "DISCLOSURE"];
+          abssection = abssection
+            .split(/\s+/)
+            .filter((word, index) => index >= 3 || !unwantedWords.includes(word.toUpperCase())) // Remove only first 3 words if matched
+            .join(" ");
+
+          // Remove numbers like [123] and standalone numbers
           const filteredContentforAbstractSection = abssection.replace(
             /\[\d+\]|\b(?:[1-4]|[6-9])?\d{1,}(?:(?<!\[\d+)\b5\b)?\b/g,
             ""
           );
+
           const wordsForDetAbs = filteredContentforAbstractSection
             .split(/\s+/)
             .filter(Boolean);
+
           const absWordCount = wordsForDetAbs.length;
           const ab = abssec[0].match(/^(.*?)(?=\n|$)/);
-          const ab1 = ab[1].trim();
+          const ab1 = ab ? ab[1].trim() : "Abstract";
+
           sectionData.push({ sName: ab1, sCount: absWordCount });
           setSectionData(sectionData);
-
           setAbstractWord(absWordCount);
-          console.log("abs", absWordCount);
+
+          console.log("abstract count", absWordCount);
+          console.log("Raw Extracted Abstract:", abssec[1]);  // Before processing
+          console.log("Cleaned Abstract:", filteredContentforAbstractSection);  // After processing
+          console.log("Word Array:", wordsForDetAbs);  // Array of words counted
+          console.log("Final Word Count:", absWordCount);
         }
+
         console.log("ajaha", sectionData);
+
 
         // to count figures
         const figRegex =
@@ -385,7 +403,7 @@ function Analysis() {
           const descriptionText = descriptionMatches[1];
 
           const imageRegex1 =
-            /(?:FIG(?:URE)?)\.?[-\s]?(?:\d+|[IVXLCDM]+)[A-Z]?(?:\([\w\s]+\))?\b/gi;
+            /(?:FIG(?:URE)?)\.?[-\s]?(?:\d+|[IVXLCDM]+)[A-Z]?(?:\([F\w\s]+\))?\b/gi;
           const matches = descriptionText.match(imageRegex1);
           const uniqueMatches = [...new Set(matches)];
           const matchesWithoutanyWord = uniqueMatches.filter(
@@ -525,20 +543,21 @@ function Analysis() {
           {/\d/.test(summaryWord) && <p>Summary : <strong>{summaryWord}</strong></p>}
           {/\d/.test(drofDraWord) && <p>Description of Drawing : <strong>{drofDraWord}</strong></p>}
 
-          <p>Total Number of Figures:<strong>{imgCount}</strong></p>
+          <p>Total Number of Figures : <strong>{imgCount}</strong></p>
 
           {/\d/.test(detaDesWord) && <p>Detailed Description : <strong>{detaDesWord}</strong></p>}
           {/\d/.test(claimedWord) && <p>Claims : <strong>{claimedWord}</strong></p>}
           {/\d/.test(abstractWord) && <p>Abstract : <strong>{abstractWord}</strong></p>}
-          {/\d/.test(lineCount) && <p>Total lines: <strong>{lineCount}</strong></p>}
+          {/* {/\d/.test(lineCount) && <p>Total lines: <strong>{lineCount}</strong></p>} */}
 
-          <button onClick={handleSummary}>{showSummary ? "Close the Summary Of calculations" : "Click here to view summary of the calculations"}</button>
+          <button onClick={handleSummary}>{showSummary ? "Close the summary Of calculations" : "Click here to view summary of the calculations"}</button>
           {showSummary && (<>
+            <p>Total lines : <strong>{lineCount}</strong></p>
             <p>
-              Total word count: <strong>{fileContent.split(/\s+/).filter(Boolean).length}</strong>
+              Total word count : <strong>{fileContent.split(/\s+/).filter(Boolean).length}</strong>
             </p>
-            <p>Total character count: <strong>{fileContent.replace(/\s/g, "").length}</strong></p>
-            <p>Total sentence count: <strong>{sentenceCount}</strong></p> </>)}
+            <p>Total character count : <strong>{fileContent.replace(/\s/g, "").length}</strong></p>
+            <p>Total sentence count : <strong>{sentenceCount}</strong></p> </>)}
         </div>
       )}
       {showDrop && (
@@ -582,7 +601,6 @@ function Analysis() {
               textDecorationColor: "#0a0909",
               marginBottom: '2%',
               fontWeight: "bold",
-
             }}>
               Word Count of Selected Sections:
             </div>
