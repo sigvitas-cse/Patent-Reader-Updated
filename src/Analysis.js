@@ -1108,7 +1108,7 @@ function Analysis() {
     try {
       if (updatedFile) {
         // Download the updated file with replacements and highlights
-        saveAs(updatedFile, 'edited-document.docx');
+        saveAs(updatedFile, `${fileName} edited.docx`);
         setConfirmationNeeded(false); // Reset confirmation flag after download
       }
     } catch (error) {
