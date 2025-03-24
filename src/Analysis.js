@@ -1228,7 +1228,7 @@ function Analysis() {
           }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={handleProfanity}>{showProfanity ? 'Close Profanity word replacer' : 'Profanity word replacer'}</button>
+            onClick={handleProfanity}>{showProfanity ? 'Close Profanity Word Replacer' : 'Profanity Word Replacer'}</button>
         </>
       )
       }
