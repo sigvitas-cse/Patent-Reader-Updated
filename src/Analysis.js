@@ -1292,7 +1292,7 @@ function Analysis() {
         showResult && showAnalysis && (
           <div className="result">
             <h3 style={{ textDecorationColor: "#03e9f4" }}>Below is the section wise total word count</h3>
-            <p>Cross-Reference :<strong>{crossWord}</strong> </p>
+            {/\d/.test(crossWord) && <p>Cross-Reference :<strong>{crossWord}</strong> </p>}
             {/\d/.test(fieldWord) && <p>Technical Field: <strong>{fieldWord}</strong></p>}
             {/\d/.test(backgroundWord) && <p>Background : <strong>{backgroundWord}</strong></p>}
             {/\d/.test(summaryWord) && <p>Summary : <strong>{summaryWord}</strong></p>}
@@ -1399,7 +1399,6 @@ function Analysis() {
                   {showClaimContent ? "hide" : "view"} Claims
                 </button>
               </div>
-
             </div>
           </>
         )
@@ -1442,6 +1441,8 @@ function Analysis() {
                 textAlign: "left",
                 backgroundColor: "white",
                 margin: "0",
+                paddingLeft:"20px",
+                paddingRight:"20px"
               }}
             >
               {fileContent
@@ -1470,7 +1471,7 @@ function Analysis() {
       {
         showClaimContent && showAnalysis && (
           <div className="claim-content">
-            <h2>CLAIMS:</h2>
+            <h2>Claims:</h2>
             <p>Total Claims:{total}</p>
             <p>Independent Claims:{independent}</p>
             <p>Dependent Claims:{dependent}</p>
