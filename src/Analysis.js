@@ -77,6 +77,8 @@ function Analysis() {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showProfanity, setShowProfanity] = useState(false);
   const [isHovered, setIsHovered] = useState(false)
+  const [showIndependentClaim, setShowIndependentClaim] = useState(false);
+  const [showDependentClaim, setShowDependentClaim] = useState(false);
 
 
   // Predefined words to search for and their replacement options
@@ -403,7 +405,9 @@ function Analysis() {
             console.log("line is", line);
 
             const words = line.split(/\s+/).filter(Boolean);
-            const wordCount = words.length;
+            const wordCount = words.length - 1;
+            console.log("claim word count", wordCount);
+
             if (/claim\s+(\d+)/i.test(line)) {
               dependentClaims.push(`claim ${i + 1} - ${wordCount} words`);
               dependentClaimCount++;
@@ -1176,6 +1180,13 @@ function Analysis() {
     // setShowReplacementSelector(showProfanity ? '' : setShowReplacementSelector(false))
   }
 
+  const handleIndependentClaimList = () => {
+    setShowIndependentClaim((prevValue) => !prevValue)
+  }
+
+  const handleDependentClaimList = () => {
+    setShowDependentClaim((prevValue) => !prevValue)
+  }
 
   return (
     <div className="App">
@@ -1441,8 +1452,8 @@ function Analysis() {
                 textAlign: "left",
                 backgroundColor: "white",
                 margin: "0",
-                paddingLeft:"20px",
-                paddingRight:"20px"
+                paddingLeft: "20px",
+                paddingRight: "20px"
               }}
             >
               {fileContent
@@ -1476,13 +1487,17 @@ function Analysis() {
             <p>Independent Claims:{independent}</p>
             <p>Dependent Claims:{dependent}</p>
             <p>
-              <b>Independent Claims List:</b>
+              <button onClick={handleIndependentClaimList}>{showIndependentClaim ? 'Close Independent Claim List Count' : 'Show Independent Claim List Count'}</button>
             </p>
-            <pre style={{ color: "white", backgroundColor: "GrayText" }}>{independentClaimLists}</pre>
+            {showIndependentClaim && (
+              <pre style={{ color: "white", backgroundColor: "GrayText" }}>{independentClaimLists}</pre>
+            )}
             <p>
-              <b>Dependent Claims:</b>
+              <button onClick={handleDependentClaimList}>{showDependentClaim ? 'Close Dependent Claim List Count' : 'Show Dependent Claim List Count'}</button>
             </p>
-            <pre style={{ color: "white", backgroundColor: "GrayText" }}>{dependentClaimLists}</pre>
+            {showDependentClaim && (
+              <pre style={{ color: "white", backgroundColor: "GrayText" }}>{dependentClaimLists}</pre>
+            )}
           </div>
         )
       }

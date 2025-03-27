@@ -242,3 +242,8 @@ ul {
     background: var(--primary);
     /* color: black; */
 }
+
+.independent claimList{
+     color: white; 
+     background-color: rgb(197, 191, 191);
+}
