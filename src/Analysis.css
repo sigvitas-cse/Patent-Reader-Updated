@@ -247,3 +247,17 @@ ul {
      color: white; 
      background-color: rgb(197, 191, 191);
 }
+
+.exceeding {
+    color: red;
+  }
+  
+  .normal {
+    color: black;
+  }
+  
+  .warning {
+    color: rgb(74, 66, 66);
+    font-weight: bold;
+  }
+  

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Confirmation = ({ wordCounts, replacementSelections, handleConfirmDownload, showProfanity, confirmationNeeded}) => {
+const Confirmation = ({ wordCounts, replacementSelections, handleConfirmDownload, showProfanity, confirmationNeeded }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const containerStyle = {
