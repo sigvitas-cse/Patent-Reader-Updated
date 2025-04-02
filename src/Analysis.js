@@ -205,20 +205,31 @@ function Analysis() {
         const result = await mammoth.extractRawText({ arrayBuffer: content });
         const text = result.value;
 
-        //regular expression to extract title
         const titleRegx =
           /([\s\S]*?)(cross-reference to related application|CROSS|Cross|technical|CROSS REFERENCE TO RELATED APPLICATIONS|What is claimed is|Claims|CLAIMS|WHAT IS CLAIMED IS|abstract|ABSTRACT|Cross-reference to related application|CROSS-REFERENCE TO RELATED APPLICATION|field|background|summary|description of the drawing|$)/i;
         const titlesec = titleRegx.exec(text);
-        if (titlesec) {
-          const titlenames = titlesec[1];
-          const titlename = titlenames.replace(/\[\d+\]/g, "");
 
-          const wordss = titlename.split(/\s+/).filter(Boolean);
-          const chars = titlename.replace(/\s/g, "");
-          setTitleChar(chars.length);
-          setWordCount(wordss.length);
-          setModifiedTitle(titlename);
+        let titlename = "";
+
+        if (titlesec) {
+          titlename = titlesec[1].replace(/\[\d+\]/g, "");
         }
+
+        // Improved "(54)" section extraction (stops at next heading in parentheses)
+        const titleMatch = text.match(
+          /\(54\)\s*([\s\S]+?)(?=\(\d+\)|References Cited|U\.S\. PATENT DOCUMENTS|DIFFERENT ROUGHNESS|$)/i
+        );
+
+        if (titleMatch) {
+          titlename = titleMatch[1].trim();
+        }
+
+        const wordss = titlename.split(/\s+/).filter(Boolean);
+        const chars = titlename.replace(/\s/g, "");
+
+        setTitleChar(chars.length);
+        setWordCount(wordss.length);
+        setModifiedTitle(titlename);
 
         const sectionData = [];
         //regular expression to extract Cross-reference
@@ -526,6 +537,8 @@ function Analysis() {
         const figRegex =
           /(?:Description of(?: the)? Drawings|DESCRIPTION OF(?: THE)? DRAWINGS)([\s\S]*?)(?:DETAILED DESCRIPTION|\nDetailed Description|DESCRIPTION OF EMBODIMENTS|DESCRIPTION OF IMPLEMENTATIONS|DETAILED DESCRIPTION OF SPECIFIC EMBODIMENTS|What is claimed is|CLAIMS|ABSTRACT|CROSS-REFERENCE TO RELATED APPLICATION|FIELD|BACKGROUND|SUMMARY|BRIEF DESCRIPTION THE INVENTION|$)/;
         const descriptionMatches = figRegex.exec(text);
+        console.log("inside counting figures", descriptionMatches);
+
         if (descriptionMatches) {
           const descriptionText = descriptionMatches[1];
 
@@ -665,7 +678,6 @@ function Analysis() {
               .trim()
               .toLowerCase();
             // console.log("paragraph text is ", paragraphText);
-
             return paragraphText === headingText.toLowerCase();
           };
 
@@ -1253,8 +1265,8 @@ function Analysis() {
     setShowAnalysis((prevValue) => !prevValue);
     setShowDrop(showAnalysis ? "" : setShowDrop(false));
     setShowResult(showAnalysis ? "" : setShowResult(false));
-    setShowFileContent(showAnalysis ? "" : setShowFileContent(false))
-    setShowClaimContent(showAnalysis ? "" : setShowClaimContent(false))
+    setShowFileContent(showAnalysis ? "" : setShowFileContent(false));
+    setShowClaimContent(showAnalysis ? "" : setShowClaimContent(false));
   };
 
   const handleProfanity = () => {
@@ -1423,92 +1435,116 @@ function Analysis() {
       </div> */}
       {showResult && showAnalysis && (
         <div className="result">
-          <h3 style={{ textDecorationColor: "#03e9f4" }}>
-            Below is the section wise total word count
+          <h3 className="section-title">
+            Below is the section-wise total word count
           </h3>
-          {/\d/.test(crossWord) && (
-            <p>
-              Cross-Reference : <strong>{crossWord}</strong>{" "}
-            </p>
-          )}
-          {/\d/.test(fieldWord) && (
-            <p>
-              Technical Field: <strong>{fieldWord}</strong>
-            </p>
-          )}
-          {/\d/.test(backgroundWord) && (
-            <p>
-              Background : <strong>{backgroundWord}</strong>
-            </p>
-          )}
-          {/\d/.test(summaryWord) && (
-            <p>
-              Summary : <strong>{summaryWord}</strong>
-            </p>
-          )}
-          {/\d/.test(drofDraWord) && (
-            <p>
-              Description of Drawing : <strong>{drofDraWord}</strong>
-            </p>
-          )}
-
-          <p>
-            Total Number of Figures : <strong>{imgCount}</strong>
-          </p>
-
-          {/\d/.test(detaDesWord) && (
-            <p>
-              Detailed Description : <strong>{detaDesWord}</strong>
-            </p>
-          )}
-          {/\d/.test(claimedWord) && (
-            <p>
-              Claims : <strong>{claimedWord}</strong>
-            </p>
-          )}
-          {/\d/.test(abstractWord) && (
-            <p
-              onMouseEnter={() => setIsAbstractHovered(true)}
-              onMouseLeave={() => setIsAbstractHovered(false)}
-            >
-              Abstract :{" "}
-              <strong className={isAbstractExceeding ? "exceeding" : "normal"}>
-                {abstractWord}
-              </strong>
-              {isAbstractExceeding && isAbstractHovered && (
-                <p className="warning">Maximum 150 words</p>
+          <table className="styled-table">
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Word Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/\d/.test(fieldWord) && (
+                <tr>
+                  <td>Technical Field</td>
+                  <td>{fieldWord}</td>
+                </tr>
               )}
-            </p>
-          )}
-          {/* {/\d/.test(lineCount) && <p>Total lines: <strong>{lineCount}</strong></p>} */}
+              {/\d/.test(backgroundWord) && (
+                <tr>
+                  <td>Background</td>
+                  <td>{backgroundWord}</td>
+                </tr>
+              )}
+              {/\d/.test(summaryWord) && (
+                <tr>
+                  <td>Summary</td>
+                  <td>{summaryWord}</td>
+                </tr>
+              )}
+              {/\d/.test(drofDraWord) && (
+                <tr>
+                  <td>Description of Drawing</td>
+                  <td>{drofDraWord}</td>
+                </tr>
+              )}
+              <tr>
+                <td>Total Number of Figures</td>
+                <td>{imgCount}</td>
+              </tr>
+              {/\d/.test(detaDesWord) && (
+                <tr>
+                  <td>Detailed Description</td>
+                  <td>{detaDesWord}</td>
+                </tr>
+              )}
+              {/\d/.test(claimedWord) && (
+                <tr>
+                  <td>Claims</td>
+                  <td>{claimedWord}</td>
+                </tr>
+              )}
+              {/\d/.test(abstractWord) && (
+                <tr
+                  className="tooltip-container"
+                  onMouseEnter={() => setIsAbstractHovered(true)}
+                  onMouseLeave={() => setIsAbstractHovered(false)}
+                >
+                  <td>Abstract</td>
+                  <td className={isAbstractExceeding ? "exceeding" : "normal"}>
+                    {abstractWord}
+                    {isAbstractExceeding && (
+                      <span
+                        className={`tooltip ${
+                          isAbstractHovered ? "visible" : ""
+                        }`}
+                      >
+                        Maximum 150 words
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
 
-          <button onClick={handleSummary}>
-            {showSummary
-              ? "Close the summary Of calculations"
-              : "Click here to view summary of the calculations"}
+          <button className="summary-button" onClick={handleSummary}>
+            {showSummary ? "Close the Summary" : "View Summary"}
           </button>
+
           {showSummary && (
-            <>
-              <p>
-                Total lines : <strong>{lineCount}</strong>
-              </p>
-              <p>
-                Total word count :{" "}
-                <strong>
-                  {fileContent.split(/\s+/).filter(Boolean).length}
-                </strong>
-              </p>
-              <p>
-                Total character count :{" "}
-                <strong>{fileContent.replace(/\s/g, "").length}</strong>
-              </p>
-              <p>
-                Total sentence count : <strong>{sentenceCount}</strong>
-              </p>{" "}
-            </>
+            <table className="styled-table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Total lines</td>
+                  <td>{lineCount}</td>
+                </tr>
+                <tr>
+                  <td>Total word count</td>
+                  <td>{fileContent.split(/\s+/).filter(Boolean).length}</td>
+                </tr>
+                <tr>
+                  <td>Total character count</td>
+                  <td>{fileContent.replace(/\s/g, "").length}</td>
+                </tr>
+                <tr>
+                  <td>Total sentence count</td>
+                  <td>{sentenceCount}</td>
+                </tr>
+              </tbody>
+            </table>
           )}
         </div>
       )}
+
       {showDrop && showAnalysis && (
         <div>
           <div>
@@ -1558,7 +1594,7 @@ function Analysis() {
                 fontWeight: "bold",
               }}
             >
-              Word Count of Selected Sections:
+              Word Count of Selected Sections :
             </div>
             {selectedSections.map((sectionName, index) => {
               const selectedSection = sectionData.find(
