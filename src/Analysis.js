@@ -77,6 +77,7 @@ function Analysis() {
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showProfanity, setShowProfanity] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isHovered1, setIsHovered1] = useState(false);
   const [isAbstractHovered, setIsAbstractHovered] = useState(false);
   const [showIndependentClaim, setShowIndependentClaim] = useState(false);
   const [showDependentClaim, setShowDependentClaim] = useState(false);
@@ -145,6 +146,7 @@ function Analysis() {
   //to handle the Radio Buttons
   const handleRadioChange = (event) => {
     const value = event.target.value;
+
     if (value === "option1") {
       setShowResult(true);
       setShowDrop(false);
@@ -520,7 +522,7 @@ function Analysis() {
           setSectionData(sectionData);
           setAbstractWord(absWordCount);
 
-          // console.log("is Exceeding checking",isExceeding);
+          // console.log("is Exceeding checking", isExceeding);
 
           console.log("abstract count", absWordCount);
           console.log("Raw Extracted Abstract:", abssec[1]); // Before processing
@@ -1748,7 +1750,7 @@ function Analysis() {
               style={{
                 margin: "5%",
                 padding: "12px 20px",
-                background: isHovered
+                background: isHovered1
                   ? "linear-gradient(135deg,rgb(204, 151, 167), #6a4caf)"
                   : "linear-gradient(135deg, #6a4caf, #c35b7a)",
                 color: "#fff",
@@ -1759,14 +1761,14 @@ function Analysis() {
                 transition: "all 0.3s ease-in-out",
                 cursor: "pointer",
                 position: "relative",
-                boxShadow: isHovered
+                boxShadow: isHovered1
                   ? "0 0 10px rgba(255, 255, 255, 0.5)"
                   : "2px 2px 10px rgba(0, 0, 0, 0.2)",
-                transform: isHovered ? "translateY(-2px)" : "none",
+                transform: isHovered1 ? "translateY(-2px)" : "none",
                 display: "flex",
               }}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
+              onMouseEnter={() => setIsHovered1(true)}
+              onMouseLeave={() => setIsHovered1(false)}
               onClick={handleSearchReplace}
             >
               Search and Replace Profanity Words
