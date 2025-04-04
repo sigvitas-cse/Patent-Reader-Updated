@@ -30,7 +30,6 @@ function Analysis() {
   const [claimedWord, setClaimedWord] = useState("Section Not found");
   const [abstractWord, setAbstractWord] = useState("Section Not found");
   const [fileContent, setFileContent] = useState("");
-  // const [sections, setSections] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [showFileContent, setShowFileContent] = useState(false);
   const [modifiedTitle, setModifiedTitle] = useState("Title Not found");
