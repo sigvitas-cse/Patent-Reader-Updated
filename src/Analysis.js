@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Analysis.css";
 import mammoth from "mammoth";
+// import docx4js from 'docx4js'
 // import {
 //   BrowserRouter as Router,
 //   Switch,
@@ -231,7 +232,6 @@ function Analysis() {
         setTitleChar(chars.length);
         setWordCount(wordss.length);
         setModifiedTitle(titlename);
-
         const sectionData = [];
         //regular expression to extract Cross-reference
         const crossregex =
@@ -542,6 +542,7 @@ function Analysis() {
 
         if (descriptionMatches) {
           const descriptionText = descriptionMatches[1];
+          console.log("brief decription of diagrams", descriptionText);
 
           const imageRegex1 =
             /(?:FIG(?:URE)?)\.?[-\s]?(?:\d+|[IVXLCDM]+)[A-Z]?(?:\([F\w\s]+\))?\b/gi;
@@ -1307,7 +1308,7 @@ function Analysis() {
         <h1>Patent Reader</h1>
       </div>
       {/* <div>
-        <button className="manFually button" style={{marginTop}} onClick={() => navigate("/Mannual")}>Enter manually</button>
+        <button className="manually button" style={{marginTop}} onClick={() => navigate("/Mannual")}>Enter Manually</button>
       </div> */}
       <div
         style={{
@@ -1700,7 +1701,38 @@ function Analysis() {
 
       {showClaimContent && showAnalysis && (
         <div className="claim-content">
-          <h2>Claims : </h2>
+          <h2>Claims</h2>
+          <table className="styled-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>word Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Total Cliams</td>
+                <td>
+                  <strong>{total}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td>Independent Claims</td>
+                <td>
+                  {" "}
+                  <strong>{independent}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td>Dependent Claims</td>
+                <td>
+                  {" "}
+                  <strong>{dependent}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          {/* 
           <p>
             Total Claims : <strong>{total}</strong>
           </p>
@@ -1709,7 +1741,7 @@ function Analysis() {
           </p>
           <p>
             Dependent Claims : <strong>{dependent}</strong>
-          </p>
+          </p> */}
           <p>
             <button onClick={handleIndependentClaimList}>
               {showIndependentClaim

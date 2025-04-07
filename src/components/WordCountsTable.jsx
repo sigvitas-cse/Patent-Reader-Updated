@@ -5,6 +5,7 @@ const WordCountsTable = ({ wordCounts, predefinedWords, claimTermCounts }) => {
     borderCollapse: 'collapse',
     width: '100%',
     marginTop: '20px',
+    color:'black'
   };
 
   const thTdStyle = {
@@ -15,7 +16,6 @@ const WordCountsTable = ({ wordCounts, predefinedWords, claimTermCounts }) => {
 
   return (
     <div>
-      
       <h3>Profanity Word Counts</h3>
       <table style={tableStyle}>
         <thead>
