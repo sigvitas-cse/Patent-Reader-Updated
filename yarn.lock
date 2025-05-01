@@ -7734,7 +7734,7 @@ pirates@^4.0.1, pirates@^4.0.4:
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.6.tgz#3018ae32ecfcff6c29ba2267cbf21166ac1f36b9"
   integrity sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==
 
-pizzip@^3.1.4:
+pizzip@^3.1.8:
   version "3.1.8"
   resolved "https://registry.yarnpkg.com/pizzip/-/pizzip-3.1.8.tgz#2028944e4845cb08fb79412939fc41d842659858"
   integrity sha512-Nynadaz6/o1cmXDQGKqmTnbeaY10BGNc1PPOZYJMfLcjWfVJQ1ARngpVO+BrrRl/WUNIj0V9uJNrP72mkfsY5A==

@@ -306,7 +306,7 @@ ul {
 }
 
 .normal {
-    color: #ffffff;
+    color: #100f0f;
 }
 
 .warning {
@@ -356,7 +356,8 @@ ul {
         min-width: 100%;
     }
 }
-/* 
+
 h3{
-    color: black;
-} */
+    color: rgb(62, 60, 60);
+    padding-bottom: 0.5cm;
+}

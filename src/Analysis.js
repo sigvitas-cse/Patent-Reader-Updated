@@ -1,21 +1,10 @@
 import React, { useState } from "react";
 import "./Analysis.css";
 import mammoth from "mammoth";
-// import docx4js from 'docx4js'
-// import {
-//   BrowserRouter as Router,
-//   Switch,
-//   Route,
-//   Link,
-//   Routes,
-// } from "react-router-dom";
-// import QrCodeComponent from "./QrCodeComponent";
-// import Mannual from "./Mannual";
+
 import { useNavigate } from "react-router-dom";
-// import Select from "react-select";
 import PizZip from "pizzip";
 import { saveAs } from "file-saver";
-import FileUpload from "./components/FileUpload";
 import WordReplacementSelector from "./components/WordReplacementSelector";
 import WordCountsTable from "./components/WordCountsTable";
 import Confirmation from "./components/Confirmation";
@@ -34,15 +23,8 @@ function Analysis() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showFileContent, setShowFileContent] = useState(false);
   const [modifiedTitle, setModifiedTitle] = useState("Title Not found");
-  // const [originalTitle, setOriginalTitle] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [imgCount, setImgCount] = useState(0);
-  // const [totalclaims, setTotalClaims] = useState(0);
-  // const [independentClaims, setIndependentClaims] = useState(0);
-  // const [dependentClaims, setDependentClaims] = useState(0);
-  // const [dependentClaimNumbers, setDependentClaimNumbers] = useState(0);
-  // const [paragraphsInClaims, setParagraphsInClaims] = useState(0);
-  // const [paragraphCount, setParagraphCount] = useState(0);
   const [dependent, setdependent] = useState(0);
   const [independent, setIndependent] = useState(0);
   const [total, setTotal] = useState(0);
@@ -51,24 +33,33 @@ function Analysis() {
   const [showClaimContent, setShowClaimContent] = useState(false);
   const [independentClaimLists, setIndependentClaimLists] = useState("");
   const [dependentClaimLists, setDependentClaimLists] = useState("");
-  // const [showQr, setShowQr] = useState(false);
+
   const [selectedSections, setSelectedSections] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [showDrop, setShowDrop] = useState(false);
-  // const [showDropdown, setShowDropdown] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [sectionData, setSectionData] = useState([]);
   const [titleChar, setTitleChar] = useState(0);
-  // const [isCheckAll, setIsCheckAll] = useState(false)
   const [showSummary, setShowSummary] = useState(false);
   const [fileFound, setFileFound] = useState(false);
+  const [showParagraphSummary, setShowParagraphSummary] = useState(false);
+
+  //paragraph
+  const [crossParagraphCount, setCrossParagraphCount] = useState(0);
+  const [backgroundParagraphCount, setBackgroundParagraphCount] = useState(0);
+  const [summaryParagraphCount, setSummaryParagraphCount] = useState(0);
+  const [drawingDParagraphCount, setDrawingDParagraphCount] = useState(0);
+  const [detailedDescriptionPCount, setDetailedDescriptionPCount] = useState(0);
+  const [abstractPCount, setAbstractPCount] = useState(0);
 
   // State variables to manage file input, errors, word counts, matched words, confirmation status, and the updated file
   const [file, setFile] = useState(null); // The uploaded .docx file
   const [error, setError] = useState(null); // Error messages
   const [wordCounts, setWordCounts] = useState({}); // Counts of each matched predefined word
-  const [matchedWords, setMatchedWords] = useState({}); // Matched predefined words and their replacements
-  const [confirmationNeeded, setConfirmationNeeded] = useState(false); // Flag to show confirmation before download
+  const [matchedWords, setMatchedWords] = useState({}); // Matched pre
+  // fined words and their replacements
+  const [confirmationNeeded, setConfirmationNeeded] = useState(false); // Flag to show confirmation before
+  //  download
   const [updatedFile, setUpdatedFile] = useState(null); // The updated .docx file after replacements
   const [matchedKeys, setMatchedKeys] = useState([]); // Array of predefined words that were matched in the document
   const [replacementSelections, setReplacementSelections] = useState({}); // User-selected replacements for each predefined word
@@ -207,6 +198,7 @@ function Analysis() {
         const result = await mammoth.extractRawText({ arrayBuffer: content });
         const text = result.value;
 
+        //extracting a title
         const titleRegx =
           /([\s\S]*?)(cross-reference to related application|CROSS|Cross|technical|CROSS REFERENCE TO RELATED APPLICATIONS|What is claimed is|Claims|CLAIMS|WHAT IS CLAIMED IS|abstract|ABSTRACT|Cross-reference to related application|CROSS-REFERENCE TO RELATED APPLICATION|field|background|summary|description of the drawing|$)/i;
         const titlesec = titleRegx.exec(text);
@@ -233,7 +225,8 @@ function Analysis() {
         setWordCount(wordss.length);
         setModifiedTitle(titlename);
         const sectionData = [];
-        //regular expression to extract Cross-reference
+
+        // Regular expression to extract Cross-Reference section
         const crossregex =
           /(?:CROSS-REFERENCE TO RELATED APPLICATION|CROSS-REFERENCE TO RELATED APPLICATIONS|CROSS REFERENCE TO RELATED APPLICATION|Cross-reference to related application|Cross-Reference To Related Application|Related Applications)([\s\S]*?)(?:TECHNICAL FIELD|FIELD|Field|Background|BACKGROUND|Summary|SUMMARY|DESCRIPTION OF (?: THE) DRAWING|Description Of(?: The)? Drawing|DETAILED DESCRIPTION|WHAT IS CLAIMED IS|ABSTRACT|$)/;
 
@@ -242,47 +235,33 @@ function Analysis() {
           let crosssection = crosssec[1]
             .replace(/^\s*[A-Za-z]?\s*\n*/, "")
             .trim();
+
           const filteredContentforCrossSection = crosssection.replace(
             /\[\d+\]|\b(?:[1-4]|[6-9])?\d{1,}(?:(?<!\[\d+)\b5\b)?\b/g,
             ""
           );
+
+          // Count words in Cross-Reference section
           const wordsForCross = filteredContentforCrossSection
-            .replace(/[^\w\s]/g, "") // Remove special characters (except spaces)
+            .replace(/[^\w\s]/g, "") // Remove special characters
             .split(/\s+/)
             .filter(Boolean);
           const crosswordCount = wordsForCross.length;
-          console.log(
-            "Raw Extracted Cross-Section Text:",
-            JSON.stringify(crosssection)
-          );
 
-          console.log("Extracted Cross-Section Text:", crosssection);
-          console.log("Extracted Words:", wordsForCross);
-          console.log("Cross-Reference Word Count:", wordsForCross.length);
+          // Count paragraphs in Cross-Reference section
+          const crossParagraphs = filteredContentforCrossSection
+            .split("\n") // Split by newlines
+            .filter((line) => line.trim() !== "").length; // Remove empty lines
 
-          const crossCharCount = filteredContentforCrossSection.replace(
-            /\s/g,
-            ""
-          ).length;
-          const crossSentCount =
-            filteredContentforCrossSection.split(".").length;
-          const crossLineCount = filteredContentforCrossSection
-            .split("\n")
-            .filter((line) => line.trim() !== "").length;
+          console.log("cross paragraphs", crossParagraphs);
 
-          const a = text.split("\n");
-          const b = a.filter((line) => line.trim() !== "").length;
-          const cr = crosssec[0].match(/^(.*?)(?=\n|$)/);
-          const cr1 = cr[1].trim();
-          sectionData.push({
-            sName: cr1,
-            sCount: crosswordCount,
-            sChar: crossCharCount,
-            sSent: crossSentCount,
-            sLine: crossLineCount,
-          });
+          // Store counts in state
           setCrossWord(crosswordCount);
-          console.log("cross section word count", crosswordCount);
+          setCrossParagraphCount(crossParagraphs);
+
+          console.log("Extracted Cross-Reference Text:", crosssection);
+          console.log("Cross-Reference Word Count:", crosswordCount);
+          console.log("Cross-Reference Paragraph Count:", crossParagraphs);
         }
 
         //regular expression to extract Field Section
@@ -336,6 +315,13 @@ function Analysis() {
             /\[\d+\]|\b(?:[1-4]|[6-9])?\d{1,}(?:(?<!\[\d+)\b5\b)?\b/g,
             ""
           );
+
+          console.log(
+            "filtered background content",
+            filteredContentforBackgrdSection
+          );
+
+          //Count words in the background section
           const wordsForBackground = filteredContentforBackgrdSection
             .split(/\s+/)
             .filter(Boolean);
@@ -344,7 +330,14 @@ function Analysis() {
           const ba1 = ba[1].trim();
           sectionData.push({ sName: ba1, sCount: backgrdWordCount });
           setBackgroundWord(backgrdWordCount);
-          console.log("back", backgrdWordCount);
+
+          //Count paragraphs in the background section
+          const backParagrpahs = filteredContentforBackgrdSection
+            .split("\n") // Split by new lines
+            .filter((line) => line.trim() !== "").length;
+          console.log("backkground paragraphs", backParagrpahs);
+          setBackgroundParagraphCount(backParagrpahs);
+          console.log("background para count", backgrdWordCount);
         }
 
         //regular expression to extract Summary Section
@@ -365,6 +358,15 @@ function Analysis() {
           const su1 = su[1].trim();
           sectionData.push({ sName: su1, sCount: summaryWordCount });
           setSummaryWord(summaryWordCount);
+          console.log("summary text", filteredContentforSumarySection);
+
+          //count paragraphs in the summary section
+          const summaryParagraphs = filteredContentforSumarySection
+            .split("\n")
+            .filter((line) => line.trim() !== "").length;
+          setSummaryParagraphCount(summaryParagraphs);
+          console.log("Summary Paragraphs", summaryParagraphs);
+
           console.log("sum", summaryWordCount);
         }
 
@@ -386,6 +388,14 @@ function Analysis() {
           const dd1 = dd[1].trim();
           sectionData.push({ sName: dd1, sCount: dodWordCount });
           setDroofDraWord(dodWordCount);
+
+          //count paragraphs in the drawing description section
+          const drawingDescriptionPCount = filteredContentforDodSection
+            .split("\n")
+            .filter((line) => line.trim() !== "").length;
+          console.log("dod paragraphs", drawingDescriptionPCount);
+          setDrawingDParagraphCount(drawingDescriptionPCount);
+
           console.log("dod", dodWordCount);
         }
 
@@ -408,6 +418,12 @@ function Analysis() {
           const dt1 = dt[1].trim();
           sectionData.push({ sName: dt1, sCount: detDesWordCount });
           setDetaDesWord(detDesWordCount);
+
+          //count paragraphs in the detailed description section
+          const detailePCount = filteredContentforDetDesSection
+            .split(/\s+/)
+            .filter((line) => line.trim() !== "").length;
+          setDetailedDescriptionPCount(detailePCount);
           console.log("det", detDesWordCount);
         }
 
@@ -521,7 +537,12 @@ function Analysis() {
           setSectionData(sectionData);
           setAbstractWord(absWordCount);
 
-          // console.log("is Exceeding checking", isExceeding);
+          //count figures in the detailed description section
+          const abstractParaCount = filteredContentforAbstractSection
+            .split("\n")
+            .filter((line) => line.trim() !== "").length;
+          console.log("abstractP= Para graph count", abstractParaCount);
+          setAbstractPCount(abstractParaCount);
 
           console.log("abstract count", absWordCount);
           console.log("Raw Extracted Abstract:", abssec[1]); // Before processing
@@ -596,6 +617,10 @@ function Analysis() {
 
   const handleSummary = () => {
     setShowSummary((prevValue) => !prevValue);
+  };
+
+  const handleParagraphSummary = () => {
+    setShowParagraphSummary((prevValue) => !prevValue);
   };
 
   // Handler for the "Search and Replace" button click
@@ -754,6 +779,7 @@ function Analysis() {
                   matchedKeysArray.push(key);
                 }
               }
+              console.log("matched words array", matchedKeysArray);
             }
 
             // If in "Detailed Description", search for claim-specific terms
@@ -1279,8 +1305,12 @@ function Analysis() {
     );
     // setConfirmationNeeded(showProfanity ? setConfirmationNeeded(false):'')
     setConfirmationNeeded(showProfanity ? "" : setConfirmationNeeded(false));
-    // setShowReplacementSelector(showProfanity ? setShowReplacementSelector(false):'')
-    // setShowReplacementSelector(showProfanity ? '' : setShowReplacementSelector(false))
+    setShowReplacementSelector(
+      showProfanity ? setShowReplacementSelector(false) : ""
+    );
+    setShowReplacementSelector(
+      showProfanity ? "" : setShowReplacementSelector(false)
+    );
   };
 
   const handleIndependentClaimList = () => {
@@ -1410,31 +1440,7 @@ function Analysis() {
           </div>
         </>
       )}
-      {/* <div className="result" style={{ marginBottom: "4%" }}>
-        <p>Title: {modifiedTitle}</p>
-        <p> Word Count :{wordCount}</p>
-        <p>Character Count :{titleChar}</p>
-      </div>
-      <div className="radio-buttons" style={{ marginBottom: "4%" }}>
-        <label className="radio">
-          <input
-            type="radio"
-            name="radioGroup"
-            value="option1"
-            onChange={handleRadioChange}
-          />
-          All Section Analysis
-        </label>
-        <label className="radio">
-          <input
-            type="radio"
-            name="radioGroup"
-            value="option2"
-            onChange={handleRadioChange}
-          />
-          Specific Section Analysis
-        </label>
-      </div> */}
+
       {showResult && showAnalysis && (
         <div className="result">
           <h3 className="section-title">
@@ -1448,6 +1454,12 @@ function Analysis() {
               </tr>
             </thead>
             <tbody>
+              {/\d/.test(crossWord) && (
+                <tr>
+                  <td>Cross Reference</td>
+                  <td>{crossWord}</td>
+                </tr>
+              )}
               {/\d/.test(fieldWord) && (
                 <tr>
                   <td>Technical Field</td>
@@ -1516,6 +1528,15 @@ function Analysis() {
             {showSummary ? "Close the Summary" : "View Summary"}
           </button>
 
+          <button
+            className="paragraph-summary"
+            onClick={handleParagraphSummary}
+          >
+            {showParagraphSummary
+              ? "Close the Paragraph count"
+              : "View Paragraph Count"}
+          </button>
+
           {showSummary && (
             <table className="styled-table">
               <thead>
@@ -1541,6 +1562,59 @@ function Analysis() {
                   <td>Total sentence count</td>
                   <td>{sentenceCount}</td>
                 </tr>
+              </tbody>
+            </table>
+          )}
+
+          {showParagraphSummary && (
+            <table className="styled-table">
+              <thead>
+                <tr>
+                  <th>Section Name</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {crossParagraphCount > 0 && (
+                  <tr>
+                    <td>Cross Reference</td>
+                    <td>{crossParagraphCount}</td>
+                  </tr>
+                )}
+                {summaryParagraphCount > 0 && (
+                  <tr>
+                    <td>Summary</td>
+                    <td>{summaryParagraphCount}</td>
+                  </tr>
+                )}
+
+                {drawingDParagraphCount > 0 && (
+                  <tr>
+                    <td>Brief Description of Diagrams</td>
+                    <td>{drawingDParagraphCount}</td>
+                  </tr>
+                )}
+
+                {detailedDescriptionPCount > 0 && (
+                  <tr>
+                    <td>Detailed Description</td>
+                    <td>{detailedDescriptionPCount}</td>
+                  </tr>
+                )}
+
+                {abstractPCount > 0 && (
+                  <tr>
+                    <td>Abstract</td>
+                    <td>{abstractPCount}</td>
+                  </tr>
+                )}
+
+                {backgroundParagraphCount > 0 && (
+                  <tr>
+                    <td>Background</td>
+                    <td>{backgroundParagraphCount}</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           )}
@@ -1636,26 +1710,6 @@ function Analysis() {
           </div>
         </>
       )}
-      {/* <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginTop: "2%",
-        }}
-      >
-        <div>
-          <button onClick={() => setShowFileContent(!showFileContent)}>
-            {showFileContent ? "hide" : "view"} content
-          </button>
-        </div>
-        <div>
-          <button onClick={() => setShowClaimContent(!showClaimContent)}>
-            {showClaimContent ? "hide" : "view"} Claims
-          </button>
-        </div>
-
-      </div> */}
 
       {showFileContent && showAnalysis && (
         <div className="file-content" style={{ textAlign: "center" }}>
@@ -1732,16 +1786,6 @@ function Analysis() {
               </tr>
             </tbody>
           </table>
-          {/* 
-          <p>
-            Total Claims : <strong>{total}</strong>
-          </p>
-          <p>
-            Independent Claims : <strong>{independent}</strong>
-          </p>
-          <p>
-            Dependent Claims : <strong>{dependent}</strong>
-          </p> */}
           <p>
             <button onClick={handleIndependentClaimList}>
               {showIndependentClaim
@@ -1769,12 +1813,6 @@ function Analysis() {
         </div>
       )}
       <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-        {/* <h1 style={{backgroundColor:'blue', color:"white", marginLeft:"250px", marginRight:"870px", justifyContent:"-moz-initial"}}>Profanity Word Replacer</h1> */}
-
-        {/* File input for uploading .docx files */}
-        {/* <FileUpload handleFileChange={handleFileChange} error={error} /> */}
-
-        {/* Buttons for processing and downloading */}
         {fileFound && showProfanity && (
           <div style={{ marginBottom: "20px" }}>
             <button
